@@ -25,10 +25,11 @@ namespace GamePlay
         }
         void OnMouseDown()
         {
-            if (UIController.instance.IsTapOnUI()) return;
+            if (UIController.instance.IsTapOnUI() || LevelManager.instance.isLevelComplete) return;
             if (pieceType == PieceType.Start)
             {
                 ApplyRotation();
+                AudioManager.instance.Play(AudioType.TapRestrict);
             }
             else if (pieceType != PieceType.Blank)
             {
@@ -36,6 +37,7 @@ namespace GamePlay
                 ApplyRotation();
                 GameManager.instance.UpdateConnectedPoints();
                 Events.UpdateBulbPower();
+                AudioManager.instance.Play(AudioType.TapOnPiece);
             }
         }
         public void RotateInit()
@@ -70,6 +72,10 @@ namespace GamePlay
             {
                 //if (CellType == CellType.End) glowEffect.Play();
                 SetColor(GameManager.instance.connectColor, true);
+                if(GetComponent<WifiPiece>() != null)
+                {
+                    Events.WifiConectionUpdate(GetComponent<Piece>());
+                }
             }
             if (connectDirection.Top)
             {
@@ -121,6 +127,7 @@ namespace GamePlay
         Blank,
         Start,
         Middle,
-        End
+        End,
+        Wifi
     }
 }

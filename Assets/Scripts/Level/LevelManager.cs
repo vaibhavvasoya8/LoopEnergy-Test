@@ -1,20 +1,29 @@
 using UnityEngine;
+using System;
 
 namespace GamePlay
 {
     public class LevelManager : Singleton<LevelManager>
     {
+        public static event Action OnLoadLevel;
+
+        [Header("Level Data & Prefabs")]
         public LevelData levelData;
-        public Level currentLevel;
 
         public int currentLevelIndex;
 
         public LevelContainer currentLevelContainer;
+        public bool isLevelComplete = false;
+
+       
 
         // Start is called before the first frame update
         void Start()
         {
-            LoadLevel(currentLevelIndex);
+            currentLevelIndex = SavedDataHandler.instance._saveData.levelCompleted;
+            if (currentLevelIndex >= levelData.levels.Length)
+                currentLevelIndex = levelData.levels.Length - 1; 
+            LoadLevel(currentLevelIndex); 
         }
 
         void LoadLevel(int levelNo)
@@ -22,15 +31,16 @@ namespace GamePlay
             if (currentLevelContainer != null)
                 Destroy(currentLevelContainer.gameObject);
 
+            GameManager.instance.ChangeRandomTheam();
+
             if (levelNo - 1 < levelData.levels.Length)
             {
-                //currentLevelIndex = levelNo - 1;
-                currentLevel = levelData.levels[currentLevelIndex];
-                currentLevelContainer = Instantiate(currentLevel.prefab, Vector3.zero, Quaternion.identity).GetComponent<LevelContainer>();
+                currentLevelContainer = Instantiate(levelData.levels[currentLevelIndex].prefab, Vector3.zero, Quaternion.identity).GetComponent<LevelContainer>();
             }
             else
                 Debug.LogError("Invalid Level Number.");
 
+            isLevelComplete = false;
             GameManager.instance.InitLevel();
         }
 
@@ -40,7 +50,11 @@ namespace GamePlay
             if (currentLevelIndex < levelData.levels.Length)
                 LoadLevel(currentLevelIndex);
             else
+            {
                 Debug.Log("More Level Coming soon!");
+                currentLevelIndex = 0;
+                LoadLevel(currentLevelIndex);
+            }
         }
 
         public void ReloadLevel()
@@ -48,5 +62,18 @@ namespace GamePlay
             LoadLevel(currentLevelIndex);
         }
 
+        public void LoadPreviousLevel()
+        {
+            currentLevelIndex--;
+            LoadLevel(currentLevelIndex);
+        }
+        
+        public static void LoadLevel()
+        {
+            OnLoadLevel?.Invoke();
+        }
+
+       
     }
+   
 }

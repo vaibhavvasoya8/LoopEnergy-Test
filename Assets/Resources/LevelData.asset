@@ -27,4 +27,49 @@ MonoBehaviour:
     complimentType: 4
   - levelNo: 5
     prefab: {fileID: 7324196534145666056, guid: 040a4a6e67a105e4c9b339ce42f18535, type: 3}
+    complimentType: 5
+  - levelNo: 6
+    prefab: {fileID: 2795544625613567002, guid: 24280dbe3a002a14aa5c67d10c7fb776, type: 3}
+    complimentType: 6
+  - levelNo: 7
+    prefab: {fileID: 5493029830329107646, guid: df55df698ee199a49913847c5f00ca4d, type: 3}
+    complimentType: 7
+  - levelNo: 8
+    prefab: {fileID: 8937370366573001450, guid: dc3d2e524d89eb14db411fc0bca5ba2a, type: 3}
+    complimentType: 8
+  - levelNo: 9
+    prefab: {fileID: 8188133173983964983, guid: da244b7759463c64fb69a08931de0714, type: 3}
+    complimentType: 10
+  - levelNo: 10
+    prefab: {fileID: 607883184555886893, guid: 1a5b8d513aa5f0c4ca1d50c70647ce25, type: 3}
+    complimentType: 12
+  - levelNo: 11
+    prefab: {fileID: 4460172808465882078, guid: 4bbd3f0d008cc88458b070f26b915196, type: 3}
     complimentType: 2
+  - levelNo: 12
+    prefab: {fileID: 3681349449917336787, guid: 19759fc3f630fd146a427df207b7ed27, type: 3}
+    complimentType: 6
+  - levelNo: 13
+    prefab: {fileID: 7829709433257188681, guid: 448274fdec107d24baa403685f9e51a6, type: 3}
+    complimentType: 12
+  - levelNo: 14
+    prefab: {fileID: 4174822592853387350, guid: b2bb7f1c855abdf44ac45e656a1a5343, type: 3}
+    complimentType: 13
+  - levelNo: 15
+    prefab: {fileID: 2152519609673899153, guid: 73579f6c3baf8704b94fa8293f5c1ff7, type: 3}
+    complimentType: 14
+  - levelNo: 16
+    prefab: {fileID: 2670226038687962413, guid: fa2357f1591eec5408ac3f6eda9cb416, type: 3}
+    complimentType: 12
+  - levelNo: 17
+    prefab: {fileID: 120501927334524232, guid: 76e1f45fb85a2ce4c9367d401117a904, type: 3}
+    complimentType: 8
+  - levelNo: 18
+    prefab: {fileID: 3717590726168014191, guid: 91bec862220981545b7e0db740835d1c, type: 3}
+    complimentType: 9
+  - levelNo: 19
+    prefab: {fileID: 4576913400002240753, guid: 5e889a621572b9a46aa5f8890a2afd8d, type: 3}
+    complimentType: 10
+  - levelNo: 20
+    prefab: {fileID: 670434383498620791, guid: bb6354466ca47a243aa038b37963c0a0, type: 3}
+    complimentType: 5

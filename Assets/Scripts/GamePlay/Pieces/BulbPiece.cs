@@ -42,6 +42,7 @@ namespace GamePlay
             {
                 isPowerOn = true;
                 glowEffect.Play();
+                AudioManager.instance.Play(AudioType.BulbOn);
             }
         }
     }

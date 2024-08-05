@@ -4,6 +4,8 @@ using UnityEngine;
 using UIKit;
 using UnityEngine.UI;
 using GamePlay;
+using System;
+
 public class ScreenLevelCompleteUI : UIScreenBase
 {
     [SerializeField] Button home;
@@ -14,7 +16,11 @@ public class ScreenLevelCompleteUI : UIScreenBase
         home.onClick.AddListener(ShowHomeScreen);
         nextLevel.onClick.AddListener(LoadNextLevel);
     }
-
+    public override void Show(Action Callback = null)
+    {
+        base.Show(Callback);
+        AudioManager.instance.Play(AudioType.LevelComplete);
+    }
     void ShowHomeScreen()
     {
         //open home screen.

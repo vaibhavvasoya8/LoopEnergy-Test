@@ -27,9 +27,8 @@ public class ToggleController : MonoBehaviour {
 	{
 		changeValue = 1;
 		isClicked = false;
-
-		setValue(SoundSlider, true) ;
-		setValue(musicSlider,true);
+		setValue(SoundSlider, !SavedDataHandler.instance._saveData.isSFXMute);
+		setValue(musicSlider, !SavedDataHandler.instance._saveData.isMusicMute);
 	}
 	void setValue(Slider slider,bool isOn){
 		if(isOn){
@@ -42,6 +41,7 @@ public class ToggleController : MonoBehaviour {
 	}
 	public void OnToggleClicked(Slider slider){
 		if(!isClicked){
+			AudioManager.instance.Play(AudioType.UIButton);
 			if(slider.value == 1){
 				changeValue = 0;
 			}
@@ -56,7 +56,6 @@ public class ToggleController : MonoBehaviour {
 
 	IEnumerator SlideButton(Slider sliderBtn)
 	{
-		// print(sliderBtn.name + "is Click.");
 		while (sliderBtn.value != changeValue)
 		{
 			if(changeValue == 1){
@@ -76,21 +75,21 @@ public class ToggleController : MonoBehaviour {
 		if(sliderBtn.name == "MusicSlider"){
 			if(sliderBtn.value == 1){
 				musicBtnImg.sprite = btnOnImg;
-				//Music mute = false;
+				AudioManager.instance.SetMusicMute(false);
 			}else{
 				musicBtnImg.sprite = btnOffImg;
-				//	Music mute = true;
+				AudioManager.instance.SetMusicMute(true);
 			}
 		}
 		else if(sliderBtn.name == "SoundSlider"){
 			if(sliderBtn.value == 1){
 				soundBtnImg.sprite = btnOnImg;
-				// Sound mute = false;
+				AudioManager.instance.SetSFXMute(false);
 			}
 			else
 			{
 				soundBtnImg.sprite = btnOffImg;
-			//	Sound Mute = true;
+				AudioManager.instance.SetSFXMute(true);
 			}
 		}
 	}

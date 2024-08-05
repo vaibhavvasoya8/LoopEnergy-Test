@@ -22,5 +22,15 @@ public enum ComplimentType
     Good,
     Amazing,
     Welldone,
-    Perfect
+    Perfect,
+    Excellent,
+    Fantastic,
+    Superb,
+    Brilliant,
+    Outstanding,
+    Awesome,
+    Tremendous,
+    Impressive,
+    Splendid,
+    Marvelous
 }

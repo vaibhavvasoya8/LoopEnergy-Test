@@ -1,10 +1,11 @@
 using UIKit;
 using UnityEngine;
 using GamePlay;
+using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-
 	[System.Serializable]
 	public class Puzzle
 	{
@@ -20,14 +21,18 @@ public class GameManager : Singleton<GameManager>
 
 	public Color defalutColor;
 	public Color connectColor;
+	[SerializeField] Image background;
+
+	[SerializeField] ThemeData[] themeDatas;
+	private int currentThemeIndex = 0;
 
 	public CameraController cameraController;
 
-	// Use this for initialization
 	void Start()
 	{
 		
 	}
+	
 	public void InitLevel()
     {
 		Vector2 dimensions = LevelManager.instance.currentLevelContainer.CheckDimensions();
@@ -40,11 +45,6 @@ public class GameManager : Singleton<GameManager>
 		foreach (var cell in LevelManager.instance.currentLevelContainer.pieces)
 		{
 			puzzle.cells[(int)cell.transform.position.x, (int)cell.transform.position.y] = cell;
-		}
-
-		foreach (var item in puzzle.cells)
-		{
-			Debug.Log(item.name);
 		}
 
 		puzzle.winConnection = GetWinValue();
@@ -103,9 +103,17 @@ public class GameManager : Singleton<GameManager>
 		LevelManager.instance.currentLevelContainer.ResetColor();
 		UpdateColor();
 
-		if(puzzle.winConnection == connected)
-        {
-			UIController.instance.ShowNextScreen(ScreenType.LevelComplete);
+		if (puzzle.winConnection == connected)
+		{
+			LevelManager.instance.isLevelComplete = true;
+
+			if (LevelManager.instance.currentLevelIndex > SavedDataHandler.instance._saveData.levelCompleted)
+			SavedDataHandler.instance._saveData.levelCompleted = LevelManager.instance.currentLevelIndex;
+
+			Helper.Execute(this, () =>
+			{
+					UIController.instance.ShowNextScreen(ScreenType.LevelComplete);
+			}, 1);
 		}
 	}
 	void UpdateColor()
@@ -149,4 +157,38 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
+	//Theam Change 
+	public void ChangeRandomTheam()
+	{
+		int theamIndex;
+		do
+		{
+			theamIndex = UnityEngine.Random.Range(0, themeDatas.Length);
+		} while (currentThemeIndex == theamIndex);
+		currentThemeIndex = theamIndex;
+		background.sprite = themeDatas[theamIndex].background;
+		defalutColor = themeDatas[theamIndex].pieceDefaultColor;
+	}
+	
+}
+
+[System.Serializable]
+public class ThemeData
+{
+	public Sprite background;
+	public Color pieceDefaultColor;
+}
+
+public static class Helper
+{
+	public static Coroutine Execute(this MonoBehaviour monoBehaviour, System.Action action, float time)
+	{
+		return monoBehaviour.StartCoroutine(DelayedAction(action, time));
+	}
+	static IEnumerator DelayedAction(System.Action action, float time)
+	{
+		yield return new WaitForSeconds(time);
+
+		action();
+	}
 }

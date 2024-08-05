@@ -63,13 +63,20 @@ namespace GamePlay
             return dimension;
         }
         [EasyButtons.Button]
-        void GetPieces()
+        void SetPiecesRefrance()
         {
             int count = transform.childCount;
             pieces = new Piece[count];
+            startPoint = new Piece[NumberOfStartPoints];
+            int startCount = 0;
             for (int i = 0; i < count; i++)
             {
                 pieces[i] = transform.GetChild(i).GetComponent<Piece>();
+                if (pieces[i].pieceType == PieceType.Start)
+                {
+                    startPoint[startCount] = pieces[i];
+                    startCount++;
+                }
             }
         }
     }

@@ -7,6 +7,9 @@ public class CameraController : MonoBehaviour
 {
     // Ensure the camera does not go below a minimum size
     [SerializeField] float minOrthographicSize = 5;
+    // Set offset for y position
+    [SerializeField] float offset = 0.5f;
+
     Camera camera;
 
     float focusSize = 5;
@@ -18,16 +21,15 @@ public class CameraController : MonoBehaviour
     public void SetCameraPositionAndSize(int width, int height)
     {
         // Set the camera's position to the center position, preserving the original z position
-        focusPosition = new Vector3(width / 2 , (height / 2)+0.5f, transform.position.z);
-
+        focusPosition = new Vector3((width-1) / 2f , (height / 2f)+0.2f, transform.position.z);
+        transform.position = focusPosition;
         // This assumes the camera is orthographic
         // Adjust the factor to fit your specific needs
         float sizeFactor = 1.5f; // Adjust this factor as needed
         //camera.orthographicSize = width / 2 * sizeFactor;
-        focusSize = width / 2 * sizeFactor;
+        focusSize = (width+2) / 2f * sizeFactor;
         //camera.orthographicSize = Mathf.Max(camera.orthographicSize, minOrthographicSize);
     }
-    [SerializeField] float offset = 0.5f;
     public void UnfocusCamera()
     {
         if(focusSize < minOrthographicSize)

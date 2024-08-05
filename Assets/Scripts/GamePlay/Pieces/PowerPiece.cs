@@ -5,8 +5,9 @@ namespace GamePlay
 {
     public class PowerPiece : Piece
     {
-        public float duration = 0.3f; // Duration of the shake
-        public float strength = 25f; // Strength of the shake
+        [SerializeField] float duration = 0.3f; // Duration of the shake
+        [SerializeField] float strength = 25f; // Strength of the shake
+
         public override void OnStart()
         {
             base.OnStart();
@@ -33,5 +34,6 @@ namespace GamePlay
 
             content.localEulerAngles = originalRotation;
         }
+       
     }
 }
