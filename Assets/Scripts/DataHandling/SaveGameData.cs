@@ -48,4 +48,12 @@ public static class SaveGameData
 
         return Load(defaultData, password);
     }
+
+    public static void Delete()
+    {
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+    }
 }

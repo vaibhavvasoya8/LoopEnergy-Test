@@ -127,8 +127,8 @@ public class GameManager : Singleton<GameManager>
 		{
 			LevelManager.instance.isLevelComplete = true;
            
-			if (LevelManager.instance.currentLevelIndex > SavedDataHandler.instance._saveData.levelCompleted-1)
-				SavedDataHandler.instance._saveData.levelCompleted = LevelManager.instance.currentLevelIndex+1;
+			if (LevelManager.instance.currentLevelIndex >= SavedDataHandler.instance._saveData.levelCompleted)
+				SavedDataHandler.instance._saveData.levelCompleted = LevelManager.instance.currentLevelIndex + 1;
 
 			cameraController.UnfocusCamera();
 			fireBrustEffect.SetActive(true);
@@ -140,7 +140,7 @@ public class GameManager : Singleton<GameManager>
 			}, 0.5f);
 		}
 	}
-
+	
 	/// <summary>
 	/// Update color for those piece connect to eachother with the power piece.
 	/// </summary>

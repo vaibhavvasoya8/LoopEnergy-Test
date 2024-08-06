@@ -52,9 +52,15 @@ public class SavedDataHandler : Singleton<SavedDataHandler>
     }
     public void FetchDataFromGame()
     {
-        if (LevelManager.instance.currentLevelIndex > _saveData.levelCompleted)
-            _saveData.levelCompleted = LevelManager.instance.currentLevelIndex+1;
+        if (LevelManager.instance.currentLevelIndex >= _saveData.levelCompleted)
+            _saveData.levelCompleted = LevelManager.instance.currentLevelIndex;
         _saveData.dimonds = GameManager.instance.currentDimond;
+    }
+
+    [EasyButtons.Button]
+    void Delete()
+    {
+        SaveGameData.Delete();
     }
    
 }

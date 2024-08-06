@@ -64,7 +64,7 @@ namespace UIKit
         /// </summary>
         void LoadNextLevel()
         {
-            if (LevelManager.instance.currentLevelIndex + 1 < SavedDataHandler.instance._saveData.levelCompleted)
+            if (LevelManager.instance.currentLevelIndex < SavedDataHandler.instance._saveData.levelCompleted)
             {
                 LevelManager.instance.LoadNextLevel();
             }
@@ -80,7 +80,7 @@ namespace UIKit
             GameManager.instance.cameraController.FocusCamera();
 
             previousLevel.interactable = (LevelManager.instance.currentLevelIndex > 0);
-            nextLevel.interactable = (LevelManager.instance.currentLevelIndex < SavedDataHandler.instance._saveData.levelCompleted-1);
+            nextLevel.interactable = (LevelManager.instance.currentLevelIndex < SavedDataHandler.instance._saveData.levelCompleted);
 
         }
     }

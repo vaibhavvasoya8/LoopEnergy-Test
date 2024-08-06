@@ -20,7 +20,8 @@ namespace GamePlay
 
         void Start()
         {
-            currentLevelIndex = SavedDataHandler.instance._saveData.levelCompleted-1;
+            //if(SavedDataHandler.instance._saveData.levelCompleted != 0)
+                currentLevelIndex = SavedDataHandler.instance._saveData.levelCompleted;
             if (currentLevelIndex >= levelData.levels.Length)
                 currentLevelIndex = levelData.levels.Length - 1; 
             LoadLevel(currentLevelIndex); 
