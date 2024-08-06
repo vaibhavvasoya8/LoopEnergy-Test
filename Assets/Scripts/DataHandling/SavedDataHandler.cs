@@ -20,12 +20,6 @@ public class SavedDataHandler : Singleton<SavedDataHandler>
         ApplyData();
     }
 
-    [EasyButtons.Button]
-    public void Clear()
-    {
-        //SaveGameData.Delete();
-    }
-
     private void OnApplicationFocus(bool hasFocus)
     {
         if (!hasFocus)
@@ -54,26 +48,21 @@ public class SavedDataHandler : Singleton<SavedDataHandler>
 
     void ApplyData()
     {
-       // LevelManager.instance.currentLevelIndex = _saveData.levelCompleted;
+        // LevelManager.instance.currentLevelIndex = _saveData.levelCompleted;
     }
     public void FetchDataFromGame()
     {
         if (LevelManager.instance.currentLevelIndex > _saveData.levelCompleted)
-            _saveData.levelCompleted = LevelManager.instance.currentLevelIndex;
+            _saveData.levelCompleted = LevelManager.instance.currentLevelIndex+1;
+        _saveData.dimonds = GameManager.instance.currentDimond;
     }
-
-    [SerializeField] string strData;
-    [EasyButtons.Button]
-    void ParseData()
-    {
-        _saveData = JsonUtility.FromJson<SaveData>(strData);
-    }
+   
 }
 
 [Serializable]
 public class SaveData
 {
-    public int gems;
+    public int dimonds;
     public int levelCompleted = 0;
     public bool isSFXMute;
     public bool isMusicMute;

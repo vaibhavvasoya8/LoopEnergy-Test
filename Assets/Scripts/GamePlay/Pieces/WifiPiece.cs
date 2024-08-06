@@ -24,11 +24,12 @@ namespace GamePlay
             content.DORotateQuaternion(Quaternion.Euler(0, 0, realRotation), rotationSpeed);
             RotateValues();
         }
-
+        
         void WifiConnectionUpdate(Piece source)
         {
             if (source == this) return;
             isConnected = true;
+            //Update color itself and connecte piece color.
             UpdateConnectedCellColor(source.GetComponent<Piece>());
         }
 

@@ -11,6 +11,7 @@ namespace UIKit
         [SerializeField] UILogoEyesBlinkAnimation eyeOne;
         [SerializeField] UILogoEyesBlinkAnimation eyeTwo;
         [SerializeField] TapToStartAnimation tapToStartAnimation;
+        [SerializeField] Text totalDimondText;
         private void Start()
         {
             tapToStart.onClick.AddListener(StartGame);
@@ -23,6 +24,7 @@ namespace UIKit
             eyeOne.enabled = true;
             eyeTwo.enabled = true;
             tapToStartAnimation.enabled = true;
+            totalDimondText.text = GameManager.instance.currentDimond.ToString("00");
         }
         public override void OnScreenShowAnimationStarted()
         {

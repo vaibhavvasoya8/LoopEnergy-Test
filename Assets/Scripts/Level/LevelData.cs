@@ -13,6 +13,7 @@ public class Level
 {
     public int levelNo;
     public GameObject prefab;
+    public int winDimond;
     public ComplimentType complimentType;
 }
 
@@ -32,5 +33,11 @@ public enum ComplimentType
     Tremendous,
     Impressive,
     Splendid,
-    Marvelous
+    Marvelous,
+    Outstanding_Work,
+    Extraordinary,
+    Magnificent,
+    You_Did_It,
+    Great_Job,
+    Top_Notch
 }

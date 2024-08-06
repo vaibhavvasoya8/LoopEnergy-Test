@@ -18,23 +18,38 @@ public class GameManager : Singleton<GameManager>
 	}
 
 	public Puzzle puzzle;
-
-	public Color defalutColor;
+	[HideInInspector]
+	public Color defaultColor;
+	[HideInInspector]
 	public Color connectColor;
+
+	[Header("Theme Refrence")]
+	[Tooltip("Add Background image for change random background")]
 	[SerializeField] Image background;
-
+	[Tooltip("Add all background images and color for every pieces")]
 	[SerializeField] ThemeData[] themeDatas;
-	private int currentThemeIndex = 0;
-
-	public CameraController cameraController;
-
-	void Start()
-	{
-		
-	}
 	
+	[Tooltip("Add Camera Controller for set the camera size")]
+	public CameraController cameraController;
+	[Tooltip("Level Complete effect")]
+	[SerializeField] GameObject fireBrustEffect;
+
+	public int currentDimond = 0;
+
+	private int currentThemeIndex = 0;
+    public override void OnAwake()
+    {
+        base.OnAwake();
+		currentDimond = SavedDataHandler.instance._saveData.dimonds;
+	}
+
+	/// <summary>
+	/// Set all piece refrence in 2 dimensional array.
+	/// Set initial random rotation, calculate connected points and update color, camera position and zoom value.
+	/// </summary>
 	public void InitLevel()
     {
+		fireBrustEffect.SetActive(false);
 		Vector2 dimensions = LevelManager.instance.currentLevelContainer.CheckDimensions();
 
 		puzzle.width = (int)dimensions.x;
@@ -55,6 +70,9 @@ public class GameManager : Singleton<GameManager>
 		Invoke("UpdateColor",0.5f);
 	}
 	
+	/// <summary>
+	/// Count all connected points and Show level complete screen when all pieces are connected.
+	/// </summary>
 	public void UpdateConnectedPoints()
 	{
 		int connected = 0;
@@ -100,22 +118,32 @@ public class GameManager : Singleton<GameManager>
 			}
 		}
 		puzzle.currentConnection = connected;
+		// reset all pieces color.
 		LevelManager.instance.currentLevelContainer.ResetColor();
+		// Update color for those piece connect to eachother with the power piece.
 		UpdateColor();
 
 		if (puzzle.winConnection == connected)
 		{
 			LevelManager.instance.isLevelComplete = true;
+           
+			if (LevelManager.instance.currentLevelIndex > SavedDataHandler.instance._saveData.levelCompleted-1)
+				SavedDataHandler.instance._saveData.levelCompleted = LevelManager.instance.currentLevelIndex+1;
 
-			if (LevelManager.instance.currentLevelIndex > SavedDataHandler.instance._saveData.levelCompleted)
-			SavedDataHandler.instance._saveData.levelCompleted = LevelManager.instance.currentLevelIndex;
-
+			cameraController.UnfocusCamera();
+			fireBrustEffect.SetActive(true);
+			AudioManager.instance.Play(AudioType.FireBrustSound);
+			// Show level complesion screen after 0.5 seconds.
 			Helper.Execute(this, () =>
 			{
-					UIController.instance.ShowNextScreen(ScreenType.LevelComplete);
-			}, 1);
+				UIController.instance.ShowNextScreen(ScreenType.LevelComplete);
+			}, 0.5f);
 		}
 	}
+
+	/// <summary>
+	/// Update color for those piece connect to eachother with the power piece.
+	/// </summary>
 	void UpdateColor()
 	{
 		if (LevelManager.instance.currentLevelContainer.startPoint == null)
@@ -127,8 +155,11 @@ public class GameManager : Singleton<GameManager>
 		LevelManager.instance.currentLevelContainer.UpdateConnectedCellColor();
 
 	}
-	
 
+	/// <summary>
+	/// Calculate how many points is required for the level complete.
+	/// </summary>
+	/// <returns></returns>
 	int GetWinValue()
 	{
 		int winValue = 0;
@@ -144,6 +175,9 @@ public class GameManager : Singleton<GameManager>
 		return winValue;
 	}
 
+	/// <summary>
+	/// Set a random rotation for each piece except the start point (power piece).
+	/// </summary>
 	void RandomRotate()
 	{
 		foreach (var cell in puzzle.cells)
@@ -157,7 +191,9 @@ public class GameManager : Singleton<GameManager>
 		}
 	}
 
-	//Theam Change 
+	/// <summary>
+	/// Change rendom theme background image and background audio.
+	/// </summary>
 	public void ChangeRandomTheam()
 	{
 		int theamIndex;
@@ -167,7 +203,8 @@ public class GameManager : Singleton<GameManager>
 		} while (currentThemeIndex == theamIndex);
 		currentThemeIndex = theamIndex;
 		background.sprite = themeDatas[theamIndex].background;
-		defalutColor = themeDatas[theamIndex].pieceDefaultColor;
+		defaultColor = themeDatas[theamIndex].pieceDefaultColor;
+		AudioManager.instance.PlayBG(AudioType.Background);
 	}
 	
 }

@@ -5,8 +5,11 @@ namespace GamePlay
 {
     public class PowerPiece : Piece
     {
-        [SerializeField] float duration = 0.3f; // Duration of the shake
-        [SerializeField] float strength = 25f; // Strength of the shake
+        [Header("Shake Properties")]
+        [Tooltip("Duration of the shake")]
+        [SerializeField] float duration = 0.3f; 
+        [Tooltip("Strength of the shake")]
+        [SerializeField] float strength = 25f; 
 
         public override void OnStart()
         {
@@ -19,6 +22,7 @@ namespace GamePlay
             StartCoroutine(ShakeOnZAxis());
         }
 
+        //Apply Shake animations.
         IEnumerator ShakeOnZAxis()
         {
             Vector3 originalRotation = content.localEulerAngles;

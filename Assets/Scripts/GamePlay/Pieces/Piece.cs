@@ -6,16 +6,27 @@ namespace GamePlay
     [System.Serializable]
     public abstract class Piece : MonoBehaviour
     {
+        [Tooltip("Piece type")]
         public PieceType pieceType;
 
+        [Header("Connection direction points")]
         public ConnectDirection connectDirection;
+        [Tooltip("Piece position in grid.")]
         public Vector2 pos;
+        [Tooltip("It's TRUE when any point is connected to other piece point.")]
         public bool isConnected = false;
+        [Tooltip("It's TRUE when this piece is linked to the power piece(start piece).")]
         public bool isGlowing = false;
+        [Header("All sprite refrence those allow to change collore when piece is linked to power piece")]
         public SpriteRenderer[] spriteRenderers;
         public Transform content;
+        [Tooltip("Piece rotation speed.")]
         public float rotationSpeed = 0.2f;
+        
         protected float realRotation;
+
+        public abstract void ApplyRotation();
+        public virtual void OnStart() { }
 
         void Start()
         {
@@ -40,11 +51,17 @@ namespace GamePlay
                 AudioManager.instance.Play(AudioType.TapOnPiece);
             }
         }
+        /// <summary>
+        /// Change initial roation except start(power) piece.
+        /// </summary>
         public void RotateInit()
         {
             if (pieceType == PieceType.Start) return;
             ApplyRotation();
         }
+        /// <summary>
+        /// Change connection direction when piece is rotate.
+        /// </summary>
         public void RotateValues()
         {
             bool top = connectDirection.Top;
@@ -53,7 +70,11 @@ namespace GamePlay
             connectDirection.Bottom = connectDirection.Right;
             connectDirection.Right = top;
         }
-
+        /// <summary>
+        /// Set piece color and set is glowing or not.(Means is linked on power piece or not)
+        /// </summary>
+        /// <param name="color">Set defalut or glow color</param>
+        /// <param name="glow">is linked on power piece or not</param>
         public void SetColor(Color color, bool glow)
         {
             isGlowing = glow;
@@ -62,9 +83,11 @@ namespace GamePlay
                 spriteRenderer.color = color;
             }
         }
-        public abstract void ApplyRotation();
-        public virtual void OnStart() { }
 
+        /// <summary>
+        /// When connected to a power piece it updates the color of the piece and also updates the color of the piece connected to itself.
+        /// </summary>
+        /// <param name="source">pass the piece refrence those piece is call this method</param>
         public void UpdateConnectedCellColor(Piece source)
         {
             if (!isConnected) return;

@@ -5,7 +5,10 @@ using UnityEngine.Audio;
 
 public class AudioManager : Singleton<AudioManager>
 {
+    [Header("Audio name and clip refrences")]
     public List<AudioClipData> clipList;
+    
+    [Header("Audio source refrence")]
     public AudioSource sfxSource;
     public AudioSource bgSource;
 
@@ -19,7 +22,11 @@ public class AudioManager : Singleton<AudioManager>
         }
         bgSource.loop = true;
     }
-
+    /// <summary>
+    /// Play audio clip
+    /// </summary>
+    /// <param name="audioType">Audio name</param>
+    /// <param name="audioSource">Audio source to play</param>
     public void Play(AudioType audioType, AudioSource audioSource = null)
     {
         if (audioSource == null)
@@ -31,6 +38,10 @@ public class AudioManager : Singleton<AudioManager>
             audioSource.PlayOneShot(GetAudioForType(audioType));
         }
     }
+    /// <summary>
+    /// Play background music and fadeout when any music is runnint.
+    /// </summary>
+    /// <param name="audioType"></param>
     public void PlayBG(AudioType audioType)
     {
         if (audioClipsDict.ContainsKey(audioType))
@@ -38,6 +49,9 @@ public class AudioManager : Singleton<AudioManager>
             StartCoroutine(FadeOutAndIn(bgSource, GetAudioForType(audioType)));
         }
     }
+    /// <summary>
+    /// Stop background music.
+    /// </summary>
     public void StopBG()
     {
         if (bgSource.isPlaying)
@@ -45,17 +59,32 @@ public class AudioManager : Singleton<AudioManager>
             bgSource.Stop();
         }
     }
+    /// <summary>
+    /// Set Music is mute/unmute.
+    /// </summary>
+    /// <param name="isMute"></param>
     public void SetMusicMute(bool isMute)
     {
         bgSource.mute = isMute;
         SavedDataHandler.instance._saveData.isMusicMute = isMute;
     }
+
+    /// <summary>
+    /// Set Sound is mute/unmute.
+    /// </summary>
+    /// <param name="isMute"></param>
     public void SetSFXMute(bool isMute)
     {
         sfxSource.mute = isMute;
         SavedDataHandler.instance._saveData.isSFXMute = isMute;
     }
-    public AudioClip GetAudioForType(AudioType audioType)
+
+    /// <summary>
+    /// Get audio clip for given audio name.
+    /// </summary>
+    /// <param name="audioType"></param>
+    /// <returns></returns>
+    private AudioClip GetAudioForType(AudioType audioType)
     {
         if (audioClipsDict.ContainsKey(audioType))
         {
@@ -101,7 +130,8 @@ public enum AudioType
     TapOnPiece,
     TapRestrict,
     BulbOn,
-    Background
+    Background,
+    FireBrustSound
 }
 [System.Serializable]
 public class AudioClipData

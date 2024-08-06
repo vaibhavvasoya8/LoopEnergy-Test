@@ -5,8 +5,9 @@ namespace GamePlay
 {
     public class BulbPiece : Piece
     {
+        [HideInInspector]
         public bool isPowerOn;
-        ParticleSystem glowEffect;
+        private ParticleSystem glowEffect;
 
         public void OnEnable()
         {
@@ -19,6 +20,7 @@ namespace GamePlay
         public override void OnStart()
         {
             base.OnStart();
+            //Get the particle refrence.
             glowEffect = GetComponentInChildren<ParticleSystem>();
         }
 
@@ -31,7 +33,9 @@ namespace GamePlay
             content.DORotateQuaternion(Quaternion.Euler(0, 0, realRotation), rotationSpeed);
             RotateValues();
         }
-
+        /// <summary>
+        /// Play the Bulb Light effect and sound.
+        /// </summary>
         void UpdateBulbPower()
         {
             if (!isGlowing)
@@ -41,9 +45,14 @@ namespace GamePlay
             else if (!isPowerOn)
             {
                 isPowerOn = true;
-                glowEffect.Play();
+                PlayGlow();
                 AudioManager.instance.Play(AudioType.BulbOn);
             }
+        }
+
+        private void PlayGlow()
+        {
+            glowEffect.Play();
         }
     }
 }

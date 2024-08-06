@@ -7,25 +7,29 @@ namespace GamePlay
     {
         public static event Action OnLoadLevel;
 
-        [Header("Level Data & Prefabs")]
+        [Header("Level Data SO refrence")]
         public LevelData levelData;
 
         public int currentLevelIndex;
 
+        [HideInInspector]
         public LevelContainer currentLevelContainer;
+
+        [HideInInspector]
         public bool isLevelComplete = false;
 
-       
-
-        // Start is called before the first frame update
         void Start()
         {
-            currentLevelIndex = SavedDataHandler.instance._saveData.levelCompleted;
+            currentLevelIndex = SavedDataHandler.instance._saveData.levelCompleted-1;
             if (currentLevelIndex >= levelData.levels.Length)
                 currentLevelIndex = levelData.levels.Length - 1; 
             LoadLevel(currentLevelIndex); 
         }
 
+        /// <summary>
+        /// Instantiate new level.
+        /// </summary>
+        /// <param name="levelNo">Level index</param>
         void LoadLevel(int levelNo)
         {
             if (currentLevelContainer != null)
@@ -33,7 +37,7 @@ namespace GamePlay
 
             GameManager.instance.ChangeRandomTheam();
 
-            if (levelNo - 1 < levelData.levels.Length)
+            if (levelNo < levelData.levels.Length)
             {
                 currentLevelContainer = Instantiate(levelData.levels[currentLevelIndex].prefab, Vector3.zero, Quaternion.identity).GetComponent<LevelContainer>();
             }
@@ -43,7 +47,9 @@ namespace GamePlay
             isLevelComplete = false;
             GameManager.instance.InitLevel();
         }
-
+        /// <summary>
+        /// Load next level when current level is completed. and all level completed then load first level.
+        /// </summary>
         public void LoadNextLevel()
         {
             currentLevelIndex++;
@@ -57,17 +63,43 @@ namespace GamePlay
             }
         }
 
+        /// <summary>
+        /// Realod current level.
+        /// </summary>
         public void ReloadLevel()
         {
             LoadLevel(currentLevelIndex);
         }
-
+        /// <summary>
+        /// Load previous level.
+        /// </summary>
         public void LoadPreviousLevel()
         {
             currentLevelIndex--;
             LoadLevel(currentLevelIndex);
         }
-        
+        /// <summary>
+        /// Get the wining dimond amount as per the current level.
+        /// </summary>
+        /// <returns>return the number of dimond to win.</returns>
+        public int GetWinDiamond()
+        {
+            return levelData.levels[currentLevelIndex].winDimond;
+        }
+        /// <summary>
+        /// Get the complement message as per the current level.
+        /// </summary>
+        /// <returns>return the string complement message</returns>
+        public string GetComplementMessage()
+        {
+            string message = levelData.levels[currentLevelIndex].complimentType.ToString();
+            message = message.Replace("_", " ");
+            return message;
+        }
+        // for the future
+        /// <summary>
+        /// Fire the event when load the new level.
+        /// </summary>
         public static void LoadLevel()
         {
             OnLoadLevel?.Invoke();
