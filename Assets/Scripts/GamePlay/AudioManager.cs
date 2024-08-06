@@ -14,6 +14,9 @@ public class AudioManager : Singleton<AudioManager>
 
     private Dictionary<AudioType, List<AudioClip>> audioClipsDict = new Dictionary<AudioType, List<AudioClip>>();
 
+    float musicVolume;
+    IEnumerator musicFadeout;
+
     private void Start()
     {
         foreach (AudioClipData data in clipList)
@@ -21,6 +24,7 @@ public class AudioManager : Singleton<AudioManager>
             audioClipsDict.Add(data.audioType, data.audioClips);
         }
         bgSource.loop = true;
+        musicVolume = bgSource.volume;
     }
     /// <summary>
     /// Play audio clip
@@ -46,7 +50,8 @@ public class AudioManager : Singleton<AudioManager>
     {
         if (audioClipsDict.ContainsKey(audioType))
         {
-            StartCoroutine(FadeOutAndIn(bgSource, GetAudioForType(audioType)));
+            if (musicFadeout != null) StopCoroutine(musicFadeout);
+            StartCoroutine( musicFadeout = FadeOutAndIn(bgSource, GetAudioForType(audioType),0.5f));
         }
     }
     /// <summary>
@@ -92,11 +97,10 @@ public class AudioManager : Singleton<AudioManager>
         }
         return null;
     }
-
     private IEnumerator FadeOutAndIn(AudioSource source, AudioClip newClip, float transitionDuration = 1f)
     {
         // Fade out the current clip
-        float startVolume = source.volume;
+        float startVolume = musicVolume;// source.volume;
         if (source.isPlaying)
         {
             for (float t = 0; t < transitionDuration; t += Time.deltaTime)
